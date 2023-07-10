@@ -3,9 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #f9e9ff;
+        }
+    </style>
+</head>  
 <body>
-    
+
+    <!-- // Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Connexion</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" id="username" class="form-control" value="brahim09" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" id="pass" value="123456" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="btnLogin()" >Login</button>
+            </div>
+          </div>
+        </div>
+      </div>    <!-- // Modal -->
+    <!-- Navbar -->
+    <div class="d-flex justify-content-center">
+        <div class="col-8">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg bg-light shadow rounded">
+                    <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Brahim</a>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link" href="#">Profile</a>
+                        </div>
+                        <!-- BUTTON LOGIN -->
+                        <div class="d-flex justify-content-end w-100 p-3" id="div-login">
+                        <button type="button" id="btn-login" class="btn btn-outline-success mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Login</button>
+                        <button type="button" id="btn-register" class="btn btn-outline-success">Register</button>
+                        </div>
+                        <!--  // BUTTON LOGIN  -->
+                        </div>
+                        <!-- BUTTON LOGOUT -->
+                        <div class="d-flex justify-content-end w-100 p-3" id="div-logout">
+                        <button type="button" onclick="logOut()" id="btn-logout" class="btn btn-outline-danger">Log Out</button>
+                        </div>
+                        <!--  // BUTTON LOGOUT  -->
+                    </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- //Navbar -->
+    <!-- Post -->
+    <div id="posts">
+
+    </div>
+    <!--// Post -->
+    <script src="main.js"></script>
 </body>
 </html>
