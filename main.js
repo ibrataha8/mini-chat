@@ -19,7 +19,7 @@ axios.get("https://tarmeezacademy.com/api/v1/posts")
                                     <p class="fw-medium">${element.body}</p>
                                     <hr>
                                     <i class="fas fa-pen"></i> <label> (${element.comments_count}) Comments</label>
-                                    <span class="badge rounded-pill text-bg-secondary" id="tags-${element.id}"></span>
+                                    <span class="badge rounded-pill text-bg-secondary" id="${element.id}"></span>
                                 </div>
                             </div>
                         </div>
@@ -29,10 +29,16 @@ axios.get("https://tarmeezacademy.com/api/v1/posts")
         posts.innerHTML += content
 
         
-    });
-}) 
+    })
 
- 
+
+// Replot tags
+info.forEach((tags)=>{
+    let tagFin = tags.tag = "undefined" ? "" : tags.tag
+    document.getElementById(tags.id).innerHTML += tagFin
+})
+//  
+}) 
 //Login
 function btnLogin(){
     const username = document.querySelector("#username").value;
@@ -93,13 +99,18 @@ function setUp() {
     
     const divLogin = document.querySelector("#div-login")
     const divLogout = document.querySelector("#div-logout")
+
+    // Div Post
+    const divPost = document.querySelector("#btn-pst")
     
     if (token != null) {
         divLogin.style.setProperty("display", "none", "important")
         divLogout.style.setProperty("display", "flex", "important")
+        divPost.style.setProperty("display", "block", "important")
     }else{
         divLogout.style.setProperty("display", "none", "important")
         divLogin.style.setProperty("display", "flex", "important")
+        divPost.style.setProperty("display", "none", "important")
     }
     
 
@@ -124,4 +135,36 @@ function showAlertSuccess(msj,tpe){
     // Rja3 liha  setTimeout(()=>{
         // alertToHide.close()
     // }, 2000)
+}
+
+// Function Share Post
+function btnPost(){
+    const title = document.querySelector("#title-post").value;
+    const body = document.querySelector("#body-post").value;
+    const image = document.querySelector("#photo-post").files[0];
+    const token = localStorage.getItem("token");
+
+    let fromData = new FormData()
+    fromData.append("title", title)
+    fromData.append("body", body)
+    fromData.append("image", image)
+
+    const headers = {
+        "Content-Type": "multipart/from-data",
+        "authorization":`Bearer ${token}`
+    }
+    axios.post("https://tarmeezacademy.com/api/v1/posts",fromData,{
+        headers:headers
+    })
+    .then((response) => {
+        // hide modal
+        const modal = document.querySelector("#exampleModalPost");
+        const modalInstance = bootstrap.Modal.getInstance(modal)
+        modalInstance.hide()
+        showAlertSuccess("merci","success")
+        setUp()
+    }).catch(function (error) {
+        showAlertSuccess(error.response.data.message,"danger")
+      })
+
 }
