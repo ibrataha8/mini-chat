@@ -15,7 +15,7 @@
 </head>  
 <body>
 
-    <!-- // Modal -->
+    <!-- // Modal Login -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -37,7 +37,41 @@
             </div>
           </div>
         </div>
-      </div>    <!-- // Modal -->
+      </div>    
+      <!-- // Modal Login -->
+
+      <!-- Modal Register -->
+      <div class="modal fade" id="exampleModalRegister" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Register A New User</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" id="name-register" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" id="username-register" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" id="pass-register" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="btnRegister()" >Register</button>
+            </div>
+          </div>
+        </div>
+      </div>    
+      <!-- //Modal Register -->
+
+      <!-- Alert -->
+      <div id="succes-alert" style="position: fixed;;width: 30%; z-index: 99999;bottom: 0; right: 0;"></div>
+      <!-- // Alert -->
+
     <!-- Navbar -->
     <div class="d-flex justify-content-center">
         <div class="col-8">
@@ -53,7 +87,7 @@
                         <!-- BUTTON LOGIN -->
                         <div class="d-flex justify-content-end w-100 p-3" id="div-login">
                         <button type="button" id="btn-login" class="btn btn-outline-success mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Login</button>
-                        <button type="button" id="btn-register" class="btn btn-outline-success">Register</button>
+                        <button type="button" id="btn-register" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModalRegister">Register</button>
                         </div>
                         <!--  // BUTTON LOGIN  -->
                         </div>

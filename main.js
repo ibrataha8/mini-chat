@@ -1,3 +1,4 @@
+setUp() 
 axios.get("https://tarmeezacademy.com/api/v1/posts")
  .then(function (response) {
     const info = response.data.data 
@@ -18,7 +19,7 @@ axios.get("https://tarmeezacademy.com/api/v1/posts")
                                     <p class="fw-medium">${element.body}</p>
                                     <hr>
                                     <i class="fas fa-pen"></i> <label> (${element.comments_count}) Comments</label>
-                                    <span class="badge rounded-pill text-bg-secondary">${element.tags.join(" ,")}</span>
+                                    <span class="badge rounded-pill text-bg-secondary" id="tags-${element.id}"></span>
                                 </div>
                             </div>
                         </div>
@@ -29,8 +30,10 @@ axios.get("https://tarmeezacademy.com/api/v1/posts")
 
         
     });
-})
+}) 
 
+ 
+//Login
 function btnLogin(){
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#pass").value;
@@ -47,31 +50,78 @@ function btnLogin(){
         const modal = document.querySelector("#exampleModal");
         const modalInstance = bootstrap.Modal.getInstance(modal)
         modalInstance.hide()
+        showAlertSuccess("merci","success")
+        setUp()
     })
-    setUp()
 }
+
+//Register
+function btnRegister(){
+    const name = document.querySelector("#name-register").value;
+    const username = document.querySelector("#username-register").value;
+    const password = document.querySelector("#pass-register").value;
+    const params = {
+        "username": username,
+        "password": password,
+        "name":name
+    }
+    axios.post("https://tarmeezacademy.com/api/v1/register",params)
+    .then((response) => {
+        // console.log(response.data);
+        localStorage.setItem("token", response.data.token)
+        localStorage.setItem("username", JSON.stringify(response.data.user))
+        // hide modal
+        const modal = document.querySelector("#exampleModalRegister");
+        const modalInstance = bootstrap.Modal.getInstance(modal)
+        modalInstance.hide()
+        showAlertSuccess("merci","success")
+        setUp()
+    }).catch(function (error) {
+        showAlertSuccess(error.response.data.message,"danger")
+      })
+}
+
 function logOut(){
     localStorage.removeItem("token")
     localStorage.removeItem("user")
+    showAlertSuccess("merci","danger")
     setUp()
 }
 
 function setUp() {
-
     let token = localStorage.getItem("token")
-    const btnReg = document.querySelector("#btn-register")
-    const btnLogin = document.querySelector("#btn-login")
-    const btnLogout = document.querySelector("#btn-logout")
-    console.log(token);
     
+    const divLogin = document.querySelector("#div-login")
+    const divLogout = document.querySelector("#div-logout")
     
-    if (token == null) {
-        btnLogout.style.setProperty("display", "none", "!important")
-        btnReg.style.setProperty("display", "flex", "!important")
-        btnLogin.style.setProperty("display", "flex", "!important")
+    if (token != null) {
+        divLogin.style.setProperty("display", "none", "important")
+        divLogout.style.setProperty("display", "flex", "important")
     }else{
-        btnReg.style.setProperty("display", "none", "!important")
-        btnLogin.style.setProperty("display", "none", "!important")
-        btnLogout.style.setProperty("display", "flex", "!important")
+        divLogout.style.setProperty("display", "none", "important")
+        divLogin.style.setProperty("display", "flex", "important")
     }
+    
+
+}
+
+function showAlertSuccess(msj,tpe){
+    const alertPlaceholder = document.getElementById('succes-alert')
+    const alert = (message, type) => {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('')
+
+    alertPlaceholder.append(wrapper)
+}
+
+    alert(msj, tpe)
+    const alertToHide = bootstrap.Alert.getOrCreateInstance('#succes-alert')
+    // Rja3 liha  setTimeout(()=>{
+        // alertToHide.close()
+    // }, 2000)
 }
