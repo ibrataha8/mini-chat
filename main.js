@@ -11,7 +11,7 @@ window.addEventListener('scroll',()=>{
 })
 
 affichageData()
-function affichageData(page=150){
+function affichageData(page=1){
 axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
  .then(function (response) {
     const info = response.data.data 
@@ -24,13 +24,15 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
                     <div class="d-flex justify-content-center mt-5">
                     <div class="col-8">
                         <div class="container">
-                            <div class="card" onclick="afficheCard(${element.id})">
+                            <div class="card" >
                                 <div class="card-header">
-                                    <img style="width:50px;height: 30px;" src="${element.author.profile_image}" alt="">
+                                    <img style="width:50px;height: 30px;"  src="${element.author.profile_image}" alt="">
                                     <b>${element.author.username}</b>
+                                    <button class='btn btn-secondary' style='float: right' onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(element))}')">edit</button>
+
                                 </div>
-                                <div class="card-body">
-                                    <img style="width:100%; height: 300px;"src="${element.image}" alt="">    
+                                <div class="card-body" onclick="afficheCard(${element.id})">
+                                    <img style="width:100%;  height: 300px;"src="${element.image}" alt="">    
                                     <span style="color: rgb(167, 166, 166);">${element.created_at}</span>
                                     <p class="fw-semibold">${element.title}</p>
                                     <p class="fw-medium">${element.body}</p>
@@ -171,4 +173,13 @@ function btnPost(){
 // btnCardClick
 function afficheCard(id){
     window.location = "http://127.0.0.1:5500/homeDetail.html?postId="+id
+}
+
+// FUNCTIPN EDIT POST
+function editPostBtnClicked(postObject){
+    let post = JSON.parse(decodeURIComponent(postObject))
+    console.log(post);
+    return
+    
+    
 }
