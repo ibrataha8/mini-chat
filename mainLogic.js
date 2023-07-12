@@ -1,12 +1,32 @@
+setUp()
 // get Id Post Par Url
 const utlParms = new URLSearchParams(window.location.search);
 const id = utlParms.get("postId");
 // Remplir cars par Id Post 
+getPost()
+function getPost(){
 axios.get("https://tarmeezacademy.com/api/v1/posts/"+id)
 .then(response => {
     post = (response.data.data);
     console.log(post);
-    tempComment = 
+    let commentContent = ''
+    for (const comment of post.comments) {
+        let imageUser = Object.keys(comment.author.profile_image).length === 0 ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" : comment.author.profile_image;
+        commentContent+=`
+                    <!-- Comment -->
+                        <div class="p-3" style="background-color: rgb(234, 234, 234);">
+                            <!-- Picture + userName -->
+                            <div>
+                                <img src="${imageUser}" style="border-radius: 50%;width: 40px;height: 40px;" alt="">
+                                <b>@${comment.author.username}</b>
+                                <p>${comment.body}</p>
+                            </div>
+                            <!-- Picture + userName -->
+                        </div>
+                    <!-- Comment -->
+        `
+
+    }
     temp = `
             <div class="d-flex justify-content-center mt-5">
             <div class="col-8">
@@ -25,16 +45,25 @@ axios.get("https://tarmeezacademy.com/api/v1/posts/"+id)
                             <i class="fas fa-pen"></i> <label> (${post.comments_count}) Comments</label>
                             <span class="badge rounded-pill text-bg-secondary" id="${post.id}"></span>
                         </div>
+                        <!-- Comments -->
+                        <div id="comments">
+                            ${commentContent}
+                        </div>
+                        <!-- Comments -->
+                    </div>
+                    <div class="input-group mb-3" id="add-comment-div">
+                        <input type="text" id="add-comment" placeholder="Add Comment" class="form-control">
+                        <button class="btn btn-outline-primary" type="button" onclick="shareComment()">Send</button>
                     </div>
                 </div>
-              
             </div>
         </div>
+
 
     `
     postUser.innerHTML =temp
 })
-
+}
 //Alert 
 function showAlert(msj,tpe){
     const alertPlaceholder = document.getElementById('succes-alert')
@@ -56,7 +85,7 @@ function showAlert(msj,tpe){
         // alertToHide.close()
     // }, 2000)
 }
-setUp()
+
 
 
 
@@ -110,4 +139,24 @@ function getCurrentUser(){
     return user 
        
 }
-
+// add comment
+function shareComment(){
+    let comment  = document.getElementById("add-comment").value
+    let params = {
+        "body":comment
+    }
+    let token = localStorage.getItem("token")
+    let url = `https://tarmeezacademy.com/api/v1/posts/${id}/comments`
+    axios.post(url, params,{
+        headers:{ 
+            "authorization":`Bearer ${token}`
+        }
+    }).then(response=>{
+        console.log(response.data);
+        getPost()
+    }).catch( (error) => {
+        // handle error
+        msjEroor = (error.response.data.message);
+        showAlert(msjEroor,"danger")
+      })
+}

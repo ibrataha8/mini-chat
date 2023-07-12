@@ -11,7 +11,7 @@ window.addEventListener('scroll',()=>{
 })
 
 affichageData()
-function affichageData(page=1){
+function affichageData(page=150){
 axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
  .then(function (response) {
     const info = response.data.data 
