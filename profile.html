@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <script src="./node_modules/axios/dist/axios.min.js"></script>
+        <style>
+            body {
+                background-color: #f9e9ff;
+            }
+            #btn-pst{
+                width: 60px;
+                height: 60px;
+                position: fixed;
+                bottom: 5%;
+                right: 4%;
+                border-radius: 50%;
+                text-align: center;
+                font-size: 35px;
+                color: white;
+                cursor: pointer;
+            }
+            .card{
+                cursor: pointer;
+            }
+        </style>
+</head>  
+
+<body>
+<!-- Navbar -->
+    <div class="d-flex justify-content-center">
+        <div class="col-8">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg bg-light shadow rounded">
+                    <div class="container-fluid">
+                    <a class="navbar-brand" href="http://127.0.0.1:5500/home.html">Brahim</a>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+                            <a class="nav-link" href="profile.html">Profile</a>
+                        </div>
+                        <!-- BUTTON LOGIN -->
+                        <div class="d-flex justify-content-end w-100 p-3" id="div-login">
+                            <button type="button" id="btn-login" class="btn btn-outline-success mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Login</button>
+                            <button type="button" id="btn-register" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModalRegister">Register</button>
+                        </div>
+                        <!--  // BUTTON LOGIN  -->
+                        </div>
+                        <!-- BUTTON LOGOUT -->
+                        <div class="d-flex justify-content-end w-100 p-3 align-items-center" id="div-logout">
+                            <img id="image-user" src="hh" style="width: 50px;height: 50px;border-radius: 50%;" alt="">
+                            <b id="username-name" class="mx-2"></b>
+                            <button type="button" onclick="logOut()" id="btn-logout" class="btn btn-outline-danger">Log Out</button>
+                        </div>
+                        <!--  // BUTTON LOGOUT  -->
+                    </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+<!-- //Navbar -->
+        <div class="d-flex justify-content-center mt-5">
+            <div class="col-8">
+                <div class="container">
+                    <div class="card" >
+                        <div class="card-body" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <script src="mainLogic.js"></script>
+</body>
+</html>

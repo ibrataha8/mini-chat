@@ -23,8 +23,10 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
         info.forEach(element => {
             let isMysPost = userConnect != null && userConnect.id == element.author.id
             let btnEdit = ""
+            let btnRemove = ""
             if (isMysPost) {
-                btnEdit = `<button class='btn btn-secondary' style='float: right' onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(element))}')">edit</button>`
+                btnEdit = `<button class='btn btn-secondary mx-1' style='float: right' onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(element))}')">edit</button>`
+                btnRemove = `<button class='btn btn-danger' style='float: right' onclick="if (confirm('Are you sure?')) removePost(${element.id})">Remove</button>`;
             }else{
                 btnEdit = ''
             }
@@ -36,8 +38,8 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
                                 <div class="card-header">
                                     <img style="width:50px;height: 30px;"  src="${element.author.profile_image}" alt="">
                                     <b>${element.author.username}</b>
+                                    ${btnRemove}
                                     ${btnEdit}
-
                                 </div>
                                 <div class="card-body" onclick="afficheCard(${element.id})">
                                     <img style="width:100%;  height: 300px;"src="${element.image}" alt="">    
@@ -125,7 +127,7 @@ function btnLogin(){
 function btnPost(){
     let postId = document.getElementById("post-id");
     let isCreate = (postId == null || postId == "") ? false : true 
-    console.log(isCreate);
+    // console.log(isCreate);
     
 
     const title = document.querySelector("#title-post").value;
@@ -171,7 +173,7 @@ function afficheCard(id){
 // FUNCTIPN EDIT POST
 function editPostBtnClicked(postObject){
     let post = JSON.parse(decodeURIComponent(postObject))
-    console.log(post);
+    // console.log(post);
     
     document.getElementById("titleModal").innerHTML = "Edit Post"
     document.getElementById("btn-share").innerHTML = "Edit"
@@ -192,4 +194,19 @@ function switchModal(){
     document.getElementById("post-id").value = ""
     document.getElementById("title-post").value = ""
     document.getElementById("body-post").value = ""
+}
+// Function Remove Post
+function removePost(idPost){
+    console.log(idPost);
+    
+    const token = localStorage.getItem("token");
+    
+    const headers = {
+        "Content-Type": "multipart/from-data",
+        "authorization":`Bearer ${token}`
+    }
+    axios.delete("https://tarmeezacademy.com/api/v1/posts/"+idPost,{headers:headers})
+    .then((response) => {
+        affichageData()
+    })
 }
