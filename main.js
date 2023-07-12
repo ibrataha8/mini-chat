@@ -1,13 +1,30 @@
-setUp() 
-axios.get("https://tarmeezacademy.com/api/v1/posts")
+let currentPage = 1
+let lastPage 
+window.addEventListener('scroll',()=>{
+    // const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
+    // console.log({currentPage,lastPage,endOfPage});
+    // console.log({innerHeigt:window.innerHeight,pageYOffset:window.pageYOffset,docu:document.body.offsetHeight});
+    // if (endOfPage && currentPage < lastPage) {
+    //     currentPage++;
+    //     affichageData(currentPage)
+    // }
+})
+
+affichageData()
+function affichageData(page=1){
+axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
  .then(function (response) {
     const info = response.data.data 
+    lastPage = response.data.meta.last_page
+    // if (reload) {
+        document.getElementById("posts").innerHTML = ""
+    // }
     info.forEach(element => {
         content = `
                     <div class="d-flex justify-content-center mt-5">
                     <div class="col-8">
                         <div class="container">
-                            <div class="card">
+                            <div class="card" onclick="afficheCard(${element.id})">
                                 <div class="card-header">
                                     <img style="width:50px;height: 30px;" src="${element.author.profile_image}" alt="">
                                     <b>${element.author.username}</b>
@@ -26,27 +43,57 @@ axios.get("https://tarmeezacademy.com/api/v1/posts")
                     </div>
                 </div>
                 ` 
-        posts.innerHTML += content
-
+        document.getElementById("posts").innerHTML += content
         
     })
-
-
 // Replot tags
 info.forEach((tags)=>{
     let tagFin = tags.tag = "undefined" ? "" : tags.tag
     document.getElementById(tags.id).innerHTML += tagFin
 })
-//  
 }) 
+}
+
+
+//Register
+function btnRegister(){
+    const name = document.querySelector("#name-register").value;
+    const username = document.querySelector("#username-register").value;
+    const password = document.querySelector("#pass-register").value;
+    const photoReg = document.querySelector("#photo-register").files[0]
+
+    let fromData = new FormData()
+    fromData.append("username", username)
+    fromData.append("password", password)
+    fromData.append("name",name)
+    fromData.append("image",photoReg)
+
+    axios.post("https://tarmeezacademy.com/api/v1/register",fromData)
+    .then((response) => {
+        // console.log(response.data);
+        localStorage.setItem("token", response.data.token)
+        localStorage.setItem("username", JSON.stringify(response.data.user))
+        // hide modal
+        const modal = document.querySelector("#exampleModalRegister");
+        const modalInstance = bootstrap.Modal.getInstance(modal)
+        modalInstance.hide()
+        showAlert("merci","success")
+        setUp()
+    }).catch(function (error) {
+        showAlert(error.response.data.message,"danger")
+      })
+}
+
 //Login
 function btnLogin(){
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#pass").value;
-    const params = {
+    
+
+    let params = {
         "username": username,
         "password": password
-    }
+    } 
     axios.post("https://tarmeezacademy.com/api/v1/login",params)
     .then((response) => {
         // console.log(response.data);
@@ -56,86 +103,39 @@ function btnLogin(){
         const modal = document.querySelector("#exampleModal");
         const modalInstance = bootstrap.Modal.getInstance(modal)
         modalInstance.hide()
-        showAlertSuccess("merci","success")
+        showAlert("merci","success")
         setUp()
     })
 }
 
-//Register
-function btnRegister(){
-    const name = document.querySelector("#name-register").value;
-    const username = document.querySelector("#username-register").value;
-    const password = document.querySelector("#pass-register").value;
-    const params = {
-        "username": username,
-        "password": password,
-        "name":name
-    }
-    axios.post("https://tarmeezacademy.com/api/v1/register",params)
-    .then((response) => {
-        // console.log(response.data);
-        localStorage.setItem("token", response.data.token)
-        localStorage.setItem("username", JSON.stringify(response.data.user))
-        // hide modal
-        const modal = document.querySelector("#exampleModalRegister");
-        const modalInstance = bootstrap.Modal.getInstance(modal)
-        modalInstance.hide()
-        showAlertSuccess("merci","success")
-        setUp()
-    }).catch(function (error) {
-        showAlertSuccess(error.response.data.message,"danger")
-      })
-}
-
-function logOut(){
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
-    showAlertSuccess("merci","danger")
-    setUp()
-}
-
-function setUp() {
-    let token = localStorage.getItem("token")
+// function setUp() {
+//     let token = localStorage.getItem("token")
     
-    const divLogin = document.querySelector("#div-login")
-    const divLogout = document.querySelector("#div-logout")
+//     const divLogin = document.querySelector("#div-login")
+//     const divLogout = document.querySelector("#div-logout")
 
-    // Div Post
-    const divPost = document.querySelector("#btn-pst")
+//     // Div Post
+//     const divPost = document.querySelector("#btn-pst")
     
-    if (token != null) {
-        divLogin.style.setProperty("display", "none", "important")
-        divLogout.style.setProperty("display", "flex", "important")
-        divPost.style.setProperty("display", "block", "important")
-    }else{
-        divLogout.style.setProperty("display", "none", "important")
-        divLogin.style.setProperty("display", "flex", "important")
-        divPost.style.setProperty("display", "none", "important")
-    }
+//     if (token != null) {
+//         const user = getCurrentUser()
+//         console.log(user);
+//         divLogin.style.setProperty("display", "none", "important")
+//         divLogout.style.setProperty("display", "flex", "important")
+//         divPost.style.setProperty("display", "block", "important")
+//         document.getElementById("username-name").innerHTML = user.username
+//         let imageUser = Object.keys(user.profile_image).length === 0 ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" : user.profile_image;
+//         document.getElementById("image-user").src = imageUser
+//     }else{
+//         divLogout.style.setProperty("display", "none", "important")
+//         divLogin.style.setProperty("display", "flex", "important")
+//         divPost.style.setProperty("display", "none", "important")
+//     }
     
 
-}
+// }
 
-function showAlertSuccess(msj,tpe){
-    const alertPlaceholder = document.getElementById('succes-alert')
-    const alert = (message, type) => {
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-        `   <div>${message}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-    ].join('')
 
-    alertPlaceholder.append(wrapper)
-}
-
-    alert(msj, tpe)
-    const alertToHide = bootstrap.Alert.getOrCreateInstance('#succes-alert')
-    // Rja3 liha  setTimeout(()=>{
-        // alertToHide.close()
-    // }, 2000)
-}
 
 // Function Share Post
 function btnPost(){
@@ -161,10 +161,14 @@ function btnPost(){
         const modal = document.querySelector("#exampleModalPost");
         const modalInstance = bootstrap.Modal.getInstance(modal)
         modalInstance.hide()
-        showAlertSuccess("merci","success")
+        showAlert("merci","success")
+        affichageData()
         setUp()
     }).catch(function (error) {
-        showAlertSuccess(error.response.data.message,"danger")
+        showAlert(error.response.data.message,"danger")
       })
-
+}
+// btnCardClick
+function afficheCard(id){
+    window.location = "http://127.0.0.1:5500/homeDetail.html?postId="+id
 }
