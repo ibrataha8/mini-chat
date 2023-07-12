@@ -91,12 +91,13 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">Make New Post</h1>
+                      <h1 class="modal-title fs-5" id="titleModal">Make New Post</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="input-group mb-3">
                             <input type="text" id="title-post" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="basic-addon1">
+                            <input type="hidden" id="post-id" value="">
                         </div>
                         <div class="input-group mb-3">
                             <input type="text" id="body-post" class="form-control" placeholder="Body" aria-label="Body" aria-describedby="basic-addon1">
@@ -107,7 +108,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" onclick="btnPost()" >Share</button>
+                      <button id="btn-share" type="button" class="btn btn-primary" onclick="btnPost()" >Share</button>
                     </div>
                   </div>
                 </div>
@@ -115,7 +116,7 @@
       <!-- //Modal add Post  -->
         
       <!-- Add Btn Post -->
-      <div class="bg-primary" data-bs-toggle="modal" data-bs-target="#exampleModalPost" id="btn-pst">+</div>
+      <div class="bg-primary" data-bs-toggle="modal" data-bs-target="#exampleModalPost" id="btn-pst" onclick="switchModal()">+</div>
       <!-- // Add Btn Post -->
       
       <!-- Alert -->

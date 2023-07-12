@@ -14,13 +14,21 @@ affichageData()
 function affichageData(page=1){
 axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
  .then(function (response) {
+    userConnect = getCurrentUser()
     const info = response.data.data 
     lastPage = response.data.meta.last_page
     // if (reload) {
         document.getElementById("posts").innerHTML = ""
-    // }
-    info.forEach(element => {
-        content = `
+        // }
+        info.forEach(element => {
+            let isMysPost = userConnect != null && userConnect.id == element.author.id
+            let btnEdit = ""
+            if (isMysPost) {
+                btnEdit = `<button class='btn btn-secondary' style='float: right' onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(element))}')">edit</button>`
+            }else{
+                btnEdit = ''
+            }
+                content = `
                     <div class="d-flex justify-content-center mt-5">
                     <div class="col-8">
                         <div class="container">
@@ -28,7 +36,7 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
                                 <div class="card-header">
                                     <img style="width:50px;height: 30px;"  src="${element.author.profile_image}" alt="">
                                     <b>${element.author.username}</b>
-                                    <button class='btn btn-secondary' style='float: right' onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(element))}')">edit</button>
+                                    ${btnEdit}
 
                                 </div>
                                 <div class="card-body" onclick="afficheCard(${element.id})">
@@ -110,52 +118,36 @@ function btnLogin(){
     })
 }
 
-// function setUp() {
-//     let token = localStorage.getItem("token")
-    
-//     const divLogin = document.querySelector("#div-login")
-//     const divLogout = document.querySelector("#div-logout")
-
-//     // Div Post
-//     const divPost = document.querySelector("#btn-pst")
-    
-//     if (token != null) {
-//         const user = getCurrentUser()
-//         console.log(user);
-//         divLogin.style.setProperty("display", "none", "important")
-//         divLogout.style.setProperty("display", "flex", "important")
-//         divPost.style.setProperty("display", "block", "important")
-//         document.getElementById("username-name").innerHTML = user.username
-//         let imageUser = Object.keys(user.profile_image).length === 0 ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" : user.profile_image;
-//         document.getElementById("image-user").src = imageUser
-//     }else{
-//         divLogout.style.setProperty("display", "none", "important")
-//         divLogin.style.setProperty("display", "flex", "important")
-//         divPost.style.setProperty("display", "none", "important")
-//     }
-    
-
-// }
 
 
 
 // Function Share Post
 function btnPost(){
+    let postId = document.getElementById("post-id");
+    let isCreate = (postId == null || postId == "") ? false : true 
+    console.log(isCreate);
+    
+
     const title = document.querySelector("#title-post").value;
     const body = document.querySelector("#body-post").value;
     const image = document.querySelector("#photo-post").files[0];
     const token = localStorage.getItem("token");
-
     let fromData = new FormData()
     fromData.append("title", title)
     fromData.append("body", body)
     fromData.append("image", image)
-
+    let url =""
     const headers = {
         "Content-Type": "multipart/from-data",
         "authorization":`Bearer ${token}`
     }
-    axios.post("https://tarmeezacademy.com/api/v1/posts",fromData,{
+    if (isCreate){
+        url = "https://tarmeezacademy.com/api/v1/posts"
+    }else{
+        fromData.append("_method","put")
+        url = "https://tarmeezacademy.com/api/v1/posts/"+postId
+    }
+    axios.post(url,fromData,{
         headers:headers
     })
     .then((response) => {
@@ -169,6 +161,7 @@ function btnPost(){
     }).catch(function (error) {
         showAlert(error.response.data.message,"danger")
       })
+
 }
 // btnCardClick
 function afficheCard(id){
@@ -179,7 +172,24 @@ function afficheCard(id){
 function editPostBtnClicked(postObject){
     let post = JSON.parse(decodeURIComponent(postObject))
     console.log(post);
-    return
     
+    document.getElementById("titleModal").innerHTML = "Edit Post"
+    document.getElementById("btn-share").innerHTML = "Edit"
+    document.getElementById("post-id").value = post.id
+    document.getElementById("title-post").value = post.title
+    document.getElementById("body-post").value = post.body
     
+    let postModal = new bootstrap.Modal(document.getElementById("exampleModalPost",{}))
+    postModal.toggle()
+    // console.log(post);
+    // return
+}
+
+// switch Modal 
+function switchModal(){
+    document.getElementById("titleModal").innerHTML = "Make New Post"
+    document.getElementById("btn-share").innerHTML = "Share"
+    document.getElementById("post-id").value = ""
+    document.getElementById("title-post").value = ""
+    document.getElementById("body-post").value = ""
 }
