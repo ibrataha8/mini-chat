@@ -1,15 +1,18 @@
 setUp()
 // get Id Post Par Url
-const utlParms = new URLSearchParams(window.location.search);
-const id = utlParms.get("postId");
+function grtIdUrl(idName){
+    const utlParms = new URLSearchParams(window.location.search);
+    const id = utlParms.get(idName);
+    return id
+}
 // Remplir cars par Id Post 
 getPost()
 function getPost(){
-axios.get("https://tarmeezacademy.com/api/v1/posts/"+id)
+axios.get("https://tarmeezacademy.com/api/v1/posts/"+grtIdUrl("postId"))
 .then(response => {
     post = (response.data.data);
-    console.log(post);
     let commentContent = ''
+    
     for (const comment of post.comments) {
         let imageUser = Object.keys(comment.author.profile_image).length === 0 ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" : comment.author.profile_image;
         commentContent+=`

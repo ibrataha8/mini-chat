@@ -1,17 +1,17 @@
 let currentPage = 1
 let lastPage 
 window.addEventListener('scroll',()=>{
-    const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
-    console.log({currentPage,lastPage,endOfPage});
-    console.log({innerHeigt:window.innerHeight,pageYOffset:window.pageYOffset,docu:document.body.offsetHeight});
-    if (endOfPage && currentPage < lastPage) {
-        currentPage++;
-        affichageData(currentPage)
-    }
+    // const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
+    // console.log({currentPage,lastPage,endOfPage});
+    // console.log({innerHeigt:window.innerHeight,pageYOffset:window.pageYOffset,docu:document.body.offsetHeight});
+    // if (endOfPage && currentPage < lastPage) {
+    //     currentPage++;
+    //     affichageData(currentPage)
+    // }
 })
 
 affichageData()
-function affichageData(page=1){
+function affichageData(page=262){
 axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
  .then(function (response) {
     userConnect = getCurrentUser()
@@ -36,8 +36,10 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
                         <div class="container">
                             <div class="card" >
                                 <div class="card-header">
+                                <span onclick="clickUser(${element.id})">
                                     <img style="width:50px;height: 30px;"  src="${element.author.profile_image}" alt="">
                                     <b>${element.author.username}</b>
+                                </span>
                                     ${btnRemove}
                                     ${btnEdit}
                                 </div>
@@ -165,6 +167,7 @@ function btnPost(){
       })
 
 }
+
 // btnCardClick
 function afficheCard(id){
     window.location = "http://127.0.0.1:5500/homeDetail.html?postId="+id
@@ -195,10 +198,10 @@ function switchModal(){
     document.getElementById("title-post").value = ""
     document.getElementById("body-post").value = ""
 }
-// Function Remove Post
+// // Function Remove Post
 function removePost(idPost){
     console.log(idPost);
-    
+
     const token = localStorage.getItem("token");
     
     const headers = {
@@ -208,5 +211,10 @@ function removePost(idPost){
     axios.delete("https://tarmeezacademy.com/api/v1/posts/"+idPost,{headers:headers})
     .then((response) => {
         affichageData()
+        // getAllPost()
     })
+}
+
+function clickUser(userId){
+    window.location = "profile.html?userId="+userId
 }
