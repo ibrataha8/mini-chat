@@ -1,13 +1,13 @@
 let currentPage = 1
 let lastPage 
 window.addEventListener('scroll',()=>{
-    // const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
-    // console.log({currentPage,lastPage,endOfPage});
-    // console.log({innerHeigt:window.innerHeight,pageYOffset:window.pageYOffset,docu:document.body.offsetHeight});
-    // if (endOfPage && currentPage < lastPage) {
-    //     currentPage++;
-    //     affichageData(currentPage)
-    // }
+    const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
+    console.log({currentPage,lastPage,endOfPage});
+    console.log({innerHeigt:window.innerHeight,pageYOffset:window.pageYOffset,docu:document.body.offsetHeight});
+    if (endOfPage && currentPage < lastPage) {
+        currentPage++;
+        affichageData(currentPage)
+    }
 })
 
 affichageData()

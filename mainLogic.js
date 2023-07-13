@@ -160,3 +160,9 @@ function shareComment(){
         showAlert(msjEroor,"danger")
       })
 }
+
+// function get data user conneceter
+function getInfoUserConnect(){
+    const userConncter = getCurrentUser()
+    
+}
