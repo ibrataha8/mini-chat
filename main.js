@@ -20,7 +20,7 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=3&page="+page)
     const info = response.data.data 
     lastPage = response.data.meta.last_page
     // if (reload) {
-        document.getElementById("posts").innerHTML = ""
+        // document.getElementById("posts").innerHTML = ""
         // }
         info.forEach(element => {
             let isMysPost = userConnect != null && userConnect.id == element.author.id
