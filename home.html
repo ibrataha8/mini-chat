@@ -6,30 +6,17 @@
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="./node_modules/axios/dist/axios.min.js"></script>
-    <style>
-        body {
-            background-color: #f9e9ff;
-        }
-        #btn-pst{
-            width: 60px;
-            height: 60px;
-            position: fixed;
-            bottom: 5%;
-            right: 4%;
-            border-radius: 50%;
-            text-align: center;
-            font-size: 35px;
-            color: white;
-            cursor: pointer;
-        }
-        .card{
-                cursor: pointer;
-            }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>  
 <body>
 
+    <!-- Refresh Page -->
+    <div class="lds-ring"  id="loading" style="position: fixed;display: flex; top:0;bottom: 0;left: 0;right: 0; margin: auto auto;z-index: 9999991;visibility: hidden;">
+      <div></div><div></div><div></div><div></div>
+    </div>
+    <!-- // Refresh Page -->
     <!-- // Modal Login -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -129,11 +116,11 @@
             <div class="container">
                 <nav class="navbar navbar-expand-lg bg-light shadow rounded">
                     <div class="container-fluid">
-                    <a class="navbar-brand" href="http://127.0.0.1:5500/home.html">Brahim</a>
+                    <a class="navbar-brand" href="home.html">Brahim</a>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link active" aria-current="page" href="home.html">Home</a>
-                            <a class="nav-link" href="profile.html">Profile</a>
+                            <a class="nav-link" href="profile.html?userId=12">Profile</a>
                         </div>
                         <!-- BUTTON LOGIN -->
                         <div class="d-flex justify-content-end w-100 p-3" id="div-login">
@@ -146,7 +133,7 @@
                         <div class="d-flex justify-content-end w-100 p-3 align-items-center" id="div-logout">
                             <img id="image-user" src="hh" style="width: 50px;height: 50px;border-radius: 50%;" alt="">
                             <b id="username-name" class="mx-2"></b>
-                            <button type="button" onclick="logOut()" id="btn-logout" class="btn btn-outline-danger">Log Out</button>
+                            <button type="button" onclick="logOut()" id="btn-logout" class="btn btn-outline-danger"><i class="fas fa-sign-out-alt"></i></button>
                         </div>
                         <!--  // BUTTON LOGOUT  -->
                     </div>
@@ -162,6 +149,8 @@
     </div>
     <!--// Post -->
     <script src="main.js"></script>
+    <script src="mainProfile.js"></script>
     <script src="mainLogic.js"></script>
+
 </body>
 </html>

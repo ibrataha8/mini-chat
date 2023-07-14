@@ -144,6 +144,8 @@ function getCurrentUser(){
 }
 // add comment
 function shareComment(){
+    let id = grtIdUrl("postId")
+    
     let comment  = document.getElementById("add-comment").value
     let params = {
         "body":comment

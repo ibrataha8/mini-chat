@@ -11,9 +11,11 @@ window.addEventListener('scroll',()=>{
 })
 
 affichageData()
-function affichageData(page=262){
+function affichageData(page=1){
+    toogleLoading(1)
 axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
  .then(function (response) {
+    toogleLoading(0)
     userConnect = getCurrentUser()
     const info = response.data.data 
     lastPage = response.data.meta.last_page
@@ -25,8 +27,8 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
             let btnEdit = ""
             let btnRemove = ""
             if (isMysPost) {
-                btnEdit = `<button class='btn btn-secondary mx-1' style='float: right' onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(element))}')">edit</button>`
-                btnRemove = `<button class='btn btn-danger' style='float: right' onclick="if (confirm('Are you sure?')) removePost(${element.id})">Remove</button>`;
+                btnEdit = `<button class='btn btn-primary mx-1' style='float: right' onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(element))}')"><i class="fas fa-edit"></i></button>`
+                btnRemove = `<button class='btn btn-danger' style='float: right' onclick="if (confirm('Are you sure?')) removePost(${element.id})"><i class="fas fa-trash"></i></button>`;
             }else{
                 btnEdit = ''
             }
@@ -36,7 +38,7 @@ axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
                         <div class="container">
                             <div class="card" >
                                 <div class="card-header">
-                                <span onclick="clickUser(${element.id})">
+                                <span onclick="clickUser(${element.author.id})">
                                     <img style="width:50px;height: 30px;"  src="${element.author.profile_image}" alt="">
                                     <b>${element.author.username}</b>
                                 </span>
@@ -81,10 +83,9 @@ function btnRegister(){
     fromData.append("password", password)
     fromData.append("name",name)
     fromData.append("image",photoReg)
-
+    toogleLoading(1)
     axios.post("https://tarmeezacademy.com/api/v1/register",fromData)
     .then((response) => {
-        // console.log(response.data);
         localStorage.setItem("token", response.data.token)
         localStorage.setItem("username", JSON.stringify(response.data.user))
         // hide modal
@@ -95,6 +96,8 @@ function btnRegister(){
         setUp()
     }).catch(function (error) {
         showAlert(error.response.data.message,"danger")
+      }).finally(function () {
+        toogleLoading(0)
       })
 }
 
@@ -108,8 +111,10 @@ function btnLogin(){
         "username": username,
         "password": password
     } 
+    toogleLoading(1)
     axios.post("https://tarmeezacademy.com/api/v1/login",params)
     .then((response) => {
+        toogleLoading(0)
         // console.log(response.data);
         localStorage.setItem("token", response.data.token)
         localStorage.setItem("username", JSON.stringify(response.data.user))
@@ -130,7 +135,7 @@ function btnPost(){
     let postId = document.getElementById("post-id");
     let isCreate = (postId == null || postId == "") ? false : true 
     // console.log(isCreate);
-    
+    toogleLoading(1)
 
     const title = document.querySelector("#title-post").value;
     const body = document.querySelector("#body-post").value;
@@ -164,13 +169,15 @@ function btnPost(){
         setUp()
     }).catch(function (error) {
         showAlert(error.response.data.message,"danger")
+      }).finally(function () {
+        toogleLoading(0)
       })
 
 }
 
 // btnCardClick
 function afficheCard(id){
-    window.location = "http://127.0.0.1:5500/homeDetail.html?postId="+id
+    window.location = "homeDetail.html?postId="+id
 }
 
 // FUNCTIPN EDIT POST
@@ -208,8 +215,10 @@ function removePost(idPost){
         "Content-Type": "multipart/from-data",
         "authorization":`Bearer ${token}`
     }
+    toogleLoading(1)
     axios.delete("https://tarmeezacademy.com/api/v1/posts/"+idPost,{headers:headers})
     .then((response) => {
+        toogleLoading(0)
         affichageData()
         // getAllPost()
     })
@@ -217,4 +226,12 @@ function removePost(idPost){
 
 function clickUser(userId){
     window.location = "profile.html?userId="+userId
+}
+// function loading
+function toogleLoading(bol){
+    if (bol) {
+        document.querySelector("#loading").style.visibility = "visible"
+    }else{
+        document.querySelector("#loading").style.visibility = "hidden"
+    }
 }
