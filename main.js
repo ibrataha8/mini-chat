@@ -1,19 +1,19 @@
 let currentPage = 1
-let lastPage 
+let lastPage = 1
 window.addEventListener('scroll',()=>{
-    // const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
-    // console.log({currentPage,lastPage,endOfPage});
-    // console.log({innerHeigt:window.innerHeight,pageYOffset:window.pageYOffset,docu:document.body.offsetHeight});
-    // if (endOfPage && currentPage < lastPage) {
-    //     currentPage++;
-    //     affichageData(currentPage)
-    // }
+    let endOfPage = (window.innerHeight + window.pageYOffset) >= (document.documentElement.scrollHeight - 1);    // console.log({currentPage,lastPage,endOfPage});
+    // console.log({innerHeigt:window.innerHeight,pageYOffset:window.pageYOffset,docu:document.body.scrollHeight,somme:window.innerHeight+window.pageYOffset+1,endOfPage});
+    if (endOfPage && currentPage<lastPage) {
+        currentPage++;
+        console.log("second");
+        affichageData(currentPage)
+    }
 })
 
 affichageData()
 function affichageData(page=1){
     toogleLoading(1)
-axios.get("https://tarmeezacademy.com/api/v1/posts?limit=8&page="+page)
+axios.get("https://tarmeezacademy.com/api/v1/posts?limit=3&page="+page)
  .then(function (response) {
     toogleLoading(0)
     userConnect = getCurrentUser()
